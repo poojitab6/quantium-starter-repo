@@ -3,6 +3,7 @@ import plotly.express as px
 import pandas as pd
 import csv
 from pathlib import Path
+from dash.dependencies import Input, Output
 
 app = Dash()
 
@@ -21,8 +22,8 @@ with open(doc, 'r') as file:
         region.append(row['region'])
 
 df = pd.DataFrame({
-    "Sales": sales,
-    "Date": date,
+    "Sales": pd.to_numeric(sales),
+    "Date": pd.to_datetime(date),
     "Region": region
 })
 
@@ -40,7 +41,18 @@ app.layout = html.Div([
     html.Div([
         html.Div([
             html.H2("Pink Morsel Sales by Region"),
-            dcc.Graph(figure=fig)
+
+            dcc.Dropdown(
+                id='region-dropdown',
+                options = [
+                    {'label': r, 'value': r}
+                    for r in df['Region'].unique()
+                ],
+                value=df['Region'].unique()[0], #default
+                clearable=False
+            ),
+
+            dcc.Graph(id='line-graph')
         ], className="card")
     ], className="content")
 
@@ -48,3 +60,17 @@ app.layout = html.Div([
 
 if __name__== '__main__':
     app.run(debug=True)
+
+@app.callback(
+    Output('line-graph', 'figure'),
+    Input('region-dropdown', 'value')
+)
+
+def update_graph(selected_region):
+    filtered_df = df[df['Region'] == selected_region]
+
+    fig = px.line(
+        filtered_df, x="Date", y="Sales", title=f"Sales in {selected_region}"
+    )
+
+    return fig

@@ -26,12 +26,25 @@ df = pd.DataFrame({
     "Region": region
 })
 
-fig = px.line(df, x="Date", y="Sales", color="Region", title = "Pink Morsel Sales Over Time")
+fig = px.line(df, x="Date", y="Sales", color="Region", labels={"Date": "Date", "Sales": "Sales ($)", "Region": "Region"})
 
 app.layout = html.Div([
-    html.H1("Soul Foods - Pink Morsel Sales", style = {"textAlign": "center"}),
-    dcc.Graph(figure=fig)
-], style = {"fontFamily": "Arial, Helvetica, Verdana"})
+    # html.H1("Soul Foods - Pink Morsel Sales", style = {"textAlign": "center"}),
+    # dcc.Graph(figure=fig)
+
+    html.Div([
+        html.H1("Soul Foods"),
+        html.P("Sales Performance")
+    ], className="navbar"),
+
+    html.Div([
+        html.Div([
+            html.H2("Pink Morsel Sales by Region"),
+            dcc.Graph(figure=fig)
+        ], className="card")
+    ], className="content")
+
+])
 
 if __name__== '__main__':
     app.run(debug=True)

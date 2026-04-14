@@ -37,8 +37,6 @@ df = df.sort_values(by='Date')
 fig = px.line(df, x="Date", y="Sales", color="Region", labels={"Date": "Date", "Sales": "Sales ($)", "Region": "Region"})
 
 app.layout = html.Div([
-    # html.H1("Soul Foods - Pink Morsel Sales", style = {"textAlign": "center"}),
-    # dcc.Graph(figure=fig)
 
     html.Div([
         html.H1("Soul Foods"),

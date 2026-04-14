@@ -75,6 +75,9 @@ app.layout = html.Div([
 
 def update_graph(selected_region):
 
+    return generate_figure(selected_region, df)
+
+def generate_figure(selected_region, df):
     if selected_region == 'all':
         filtered_df = df
         title = "Sales in All Regions"
